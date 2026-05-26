@@ -11,6 +11,26 @@
             <div class="bg-primary text-white p-4 text-center">
                 <img src="{% static "images.jpeg" %}" alt="logo" class="logo">
             </div>
+            <nav class="navbar navbar-dark bg-primary">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a href="{% url "pokedex:index" %}" class="nav-link">Pokemons</a>
+                    </li>
+                {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <form action="{% url "logout" %}" method="post" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="nav-link btn btn-link p-0 border-0 align-baseline">Cerrar Sesion</button>
+                        </form>
+                    </li>
+                {% else %}        
+                    <li class="nav-item">
+                        <a href="{% url "pokedex:login" %}" class="nav-link">Iniciar Sesion</a>
+                    </li>
+                {% endif %}
+                </ul>
+            </nav>
+
             {% block content %}{% endblock content %}
         </div>
     </body>

@@ -4,8 +4,16 @@
 
 {% block content %}
     <h3>Pokemons</h3>
+    <hr>
+    {% if user.is_authenticated %}
+        <a href="{% url "pokedex:add_pokemon" %}" class="btn btn-success mb_3" role="button">
+            <i class="fa-solid fa-plus"></i> Añadir Pokemon
+        </a>
+    {% endif %}
    <div class="row">
-        <a href="{% url 'pokedex:add_pokemon' %}">Añadir Pokemon</a>
+        {% if user.is_authenticated %}
+            <a href="{% url 'pokedex:add_pokemon' %}">Añadir Pokemon</a>
+        {% endif %}
         {% for pokemon in pokemons %}
         <div class="col-sm-4">
             <br>
@@ -17,11 +25,14 @@
                     <a href="{{pokemon.id}}" class="btn btn-primary">
                         <i class="fa-solid fa-eye"></i>
                     </a>
-                    <a href="edit_pokemon/{{pokemon.id}}" class="btn btn-primary">
-                        <i class="fa-solid fa-pencil"></i>
-                    </a>
-                    <a href="delete_pokemon/{{pokemon.id}}" class="btn btn-danger">
-                        <i class="fa-solid fa-trash"></i>
+                    {% if user.is_authenticated %}
+                        <a href="edit_pokemon/{{pokemon.id}}" class="btn btn-primary">
+                            <i class="fa-solid fa-pencil"></i>
+                        </a>
+                        <a href="delete_pokemon/{{pokemon.id}}" class="btn btn-danger">
+                            <i class="fa-solid fa-trash"></i>
+                        </a>
+                    {% endif %}
                     </a>
                 </div>
             </div>
