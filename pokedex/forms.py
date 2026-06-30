@@ -1,5 +1,6 @@
 from django import forms
 from .models import Pokemon
+from .models import Trainer
 
 class PokemonForm(forms.ModelForm):
     class Meta:
@@ -21,3 +22,8 @@ class PokemonForm(forms.ModelForm):
             'trainer': forms.Select(attrs={'class': 'form-control'}),
             'picture': forms.ClearableFileInput(attrs={'class': 'form-control-file'}),
         }
+
+class TrainerForm(forms.ModelForm):
+    class Meta:
+        model = Trainer
+        fields = '__all__' # Esto tomará de forma automática todos los campos de tu modelo Trainer        

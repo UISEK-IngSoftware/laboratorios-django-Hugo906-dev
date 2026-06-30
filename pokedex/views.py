@@ -5,11 +5,11 @@ from django.shortcuts import redirect, render
 from pokedex.forms import PokemonForm
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.decorators import login_required
+from pokedex.forms import TrainerForm
 
 def index(request):
     pokemons = Pokemon.objects.all() #Select * from pokedex_pokemon
     trainers = Trainer.objects.all() #Select * from pokedex_trainer
-    template = loader.get_template('index.html')
     return render(request, 'index.html', {
         'pokemons': pokemons,
         'trainers': trainers
@@ -63,3 +63,33 @@ def delete_pokemon(request, id: int):
 
 class CustomLoginView(LoginView):
     template_name = 'login_form.html'
+
+@login_required
+def add_trainer(request):
+    if request.method == 'POST':
+        form = TrainerForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('pokedex:index')
+    else:
+        form = TrainerForm()
+    return render(request, 'trainer_form.html', {'form': form})
+
+@login_required
+def edit_trainer(request, id: int):
+    trainer = Trainer.objects.get(id=id)
+    if request.method == 'POST':
+        form = TrainerForm(request.POST, request.FILES, instance=trainer)
+        if form.is_valid():
+            form.save()
+            return redirect('pokedex:index')
+    else:
+        form = TrainerForm(instance=trainer)
+    return render(request, 'trainer_form.html', {'form': form})
+
+
+@login_required
+def delete_trainer(request, id: int):
+    trainer = Trainer.objects.get(id=id) # select * from pokedex_trainer where id = id
+    trainer.delete() # delete from pokedex_trainer where id = id
+    return redirect('pokedex:index')
